@@ -1,0 +1,139 @@
+# Publish @xmoney/xmoney-js to npm. Manual only.
+#
+# Prerequisites (one-time):
+#   - Add NPM_TOKEN to GitHub → Settings → Secrets and variables → Actions.
+#     Use an npm automation/granular token with Publish permission for @xmoney.
+#
+# Pre-release checklist (before Run workflow):
+#   1. Bump version in package.json (and package-lock.json) in a PR.
+#   2. Merge to main, then run this workflow and enter that version.
+#
+# The version input must match package.json. dry_run stops before publish, tag,
+# and GitHub Release.
+
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (must match package.json, e.g. 2.0.0)'
+        required: true
+        type: string
+      dry_run:
+        description: 'Run checks only; skip publish, tag, and GitHub Release'
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Read package version
+        id: package
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          VERSION=$(node -pe "JSON.parse(require('fs').readFileSync('package.json','utf8')).version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.-]+)?(\+[a-zA-Z0-9.-]+)?$ ]]; then
+            echo "Invalid semver in package.json: $VERSION"
+            exit 1
+          fi
+
+          if [ "$INPUT_VERSION" != "$VERSION" ]; then
+            echo "Workflow version '$INPUT_VERSION' does not match package.json ($VERSION)"
+            exit 1
+          fi
+
+          if echo "$VERSION" | grep -qE '(alpha|beta|-rc)'; then
+            echo "is-prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is-prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          if echo "$VERSION" | grep -qE '-rc'; then
+            echo "is-release-candidate=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is-release-candidate=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Check tag does not exist
+        run: |
+          VERSION="${{ steps.package.outputs.version }}"
+          git fetch --tags --force
+          if git rev-parse "refs/tags/$VERSION" >/dev/null 2>&1; then
+            echo "Tag $VERSION already exists"
+            exit 1
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+      - name: Publish to npm (alpha)
+        if: ${{ !inputs.dry_run && contains(steps.package.outputs.version, 'alpha') }}
+        run: npm publish --access public --tag alpha --provenance=false
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm (beta)
+        if: ${{ !inputs.dry_run && contains(steps.package.outputs.version, 'beta') }}
+        run: npm publish --access public --tag beta --provenance=false
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm (next)
+        if: ${{ !inputs.dry_run && steps.package.outputs.is-release-candidate == 'true' }}
+        run: npm publish --access public --tag next --provenance=false
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to npm (latest)
+        if: ${{ !inputs.dry_run && steps.package.outputs.is-prerelease == 'false' }}
+        run: npm publish --access public --provenance=false
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create git tag
+        if: ${{ !inputs.dry_run }}
+        run: |
+          VERSION="${{ steps.package.outputs.version }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$VERSION" -m "Release $VERSION"
+          git push origin "$VERSION"
+
+      - name: Create GitHub Release
+        if: ${{ !inputs.dry_run }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="${{ steps.package.outputs.version }}"
+          NOTES="Release $VERSION of @xmoney/xmoney-js."
+          if [ "${{ steps.package.outputs.is-prerelease }}" = "true" ]; then
+            gh release create "$VERSION" --title "$VERSION" --prerelease --notes "$NOTES"
+          else
+            gh release create "$VERSION" --title "$VERSION" --notes "$NOTES"
+          fi

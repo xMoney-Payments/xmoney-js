@@ -1,0 +1,76 @@
+<template id="checkout-loading-template">
+  <div class="checkout-loading" aria-busy="true" aria-label="Checkout loading">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</template>
+
+<template id="result-template">
+  <section class="rounded-3xl border border-black/[0.08] bg-white p-5 dark:border-white/12 dark:bg-[#18181b]">
+    <div class="rounded-2xl px-4 py-4" data-result-wash>
+      <div class="flex items-start gap-3">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full" data-result-mark aria-hidden="true"></span>
+        <div class="min-w-0">
+          <p class="mb-1.5 text-xs font-bold tracking-[0.1em] text-black/55 uppercase dark:text-zinc-400">Result</p>
+          <h2 class="text-lg font-bold tracking-[-0.02em]" data-result-title>Payment complete</h2>
+          <p class="mt-1 text-black/55 dark:text-zinc-400" data-result-subtitle>Your payment went through.</p>
+        </div>
+      </div>
+      <p class="mt-4 text-[28px] leading-none font-bold tracking-[-0.03em]" data-result-amount hidden></p>
+    </div>
+    <div class="mt-5">
+      <p class="mb-1.5 text-xs font-bold tracking-[0.1em] text-black/55 uppercase dark:text-zinc-400">Payment</p>
+      <dl class="border-t border-black/[0.08] dark:border-white/12" data-result-details></dl>
+    </div>
+    <div class="mt-4 border-t border-black/[0.08] pt-3 dark:border-white/12" data-result-raw>
+      <button type="button" class="flex w-full cursor-pointer items-center justify-between text-sm font-semibold text-black/55 dark:text-zinc-400" data-raw-toggle aria-expanded="false">
+        <span data-raw-label>View raw response</span>
+        <svg viewBox="0 0 20 20" class="h-4 w-4 transition-transform" data-raw-chevron fill="none" aria-hidden="true">
+          <path d="M5 7.5 10 12.5 15 7.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <pre class="mt-2 max-h-48 overflow-auto rounded-xl bg-[#f4f3fb] p-3 text-[11px] leading-relaxed break-all whitespace-pre-wrap text-black/70 dark:bg-white/6 dark:text-zinc-300" data-raw-body hidden></pre>
+    </div>
+  </section>
+</template>
+
+<template id="detail-row-template">
+  <div class="flex items-start justify-between gap-3 border-b border-black/[0.08] py-2.5 last:border-b-0 dark:border-white/12">
+    <dt class="shrink-0 text-black/55 dark:text-zinc-400"></dt>
+    <dd class="min-w-0 text-right font-semibold break-words"></dd>
+  </div>
+</template>
+
+<template id="product-template">
+  <article class="rounded-3xl border border-black/[0.08] bg-white p-5 dark:border-white/12 dark:bg-[#18181b]">
+    <img class="mb-3 aspect-square w-full rounded-2xl bg-[#eceaf3] object-cover" data-product-image alt="" />
+    <p class="mb-1.5 text-xs font-bold tracking-[0.1em] text-black/55 uppercase dark:text-zinc-400" data-product-category></p>
+    <h2 class="my-0.5 text-lg font-bold tracking-[-0.02em]" data-product-name></h2>
+    <p class="text-black/55 dark:text-zinc-400" data-product-blurb></p>
+    <footer class="mt-3 flex items-center justify-between gap-2">
+      <strong data-product-price></strong>
+      <div data-quantity-control></div>
+    </footer>
+  </article>
+</template>
+
+<template id="cart-row-template">
+  <li class="flex items-center gap-2.5">
+    <img class="h-12 w-12 rounded-[10px] object-cover" data-cart-image alt="" />
+    <span>
+      <strong class="block" data-cart-name></strong>
+      <span class="block text-black/55 dark:text-zinc-400" data-cart-price></span>
+    </span>
+  </li>
+</template>
+
+<template id="quantity-template">
+  <div class="inline-flex items-center overflow-hidden rounded-full border border-black/[0.08] dark:border-white/12">
+    <button class="h-8 w-8 border-0 bg-transparent disabled:opacity-45" type="button" data-minus aria-label="Decrease quantity">−</button>
+    <span class="min-w-6 text-center text-[13px] font-semibold" data-count></span>
+    <button class="h-8 w-8 border-0 bg-transparent disabled:opacity-45" type="button" data-plus aria-label="Increase quantity">+</button>
+  </div>
+</template>
+
+<template id="add-button-template">
+  <button class="cursor-pointer rounded-full bg-(--accent) px-[18px] py-3 font-semibold text-(--on-accent) hover:brightness-95 disabled:cursor-default disabled:opacity-45" type="button">Add</button>
+</template>

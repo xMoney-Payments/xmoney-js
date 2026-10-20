@@ -1,0 +1,94 @@
+<section class="mx-auto max-w-[1040px] rounded-[28px] px-6 py-6" data-page="playground" data-playground-page>
+  <header class="mb-7 flex items-start justify-between gap-4">
+    <div>
+      <h1 class="text-[32px] leading-[1.05] font-bold tracking-[-0.03em]">Playground</h1>
+      <p class="mt-1.5 max-w-[62ch] !text-current opacity-70">Locale and theme update the mounted checkout. Method and card options mount it again.</p>
+    </div>
+    <button class="cursor-pointer rounded-full border border-black/[0.08] bg-transparent px-[18px] py-3 font-semibold dark:border-white/12" type="button" data-test-cards>Test cards</button>
+  </header>
+  <div class="grid items-start gap-6 wide:grid-cols-[320px_minmax(0,1fr)]">
+    <form
+      class="grid content-start gap-4 rounded-3xl border border-black/[0.08] bg-white p-5 wide:sticky wide:top-6 wide:max-h-[calc(100vh-48px)] wide:overflow-auto dark:border-white/12 dark:bg-[#18181b] [&_fieldset]:m-0 [&_fieldset]:grid [&_fieldset]:gap-3 [&_fieldset]:border-0 [&_fieldset]:p-0 [&_fieldset:disabled]:opacity-50 [&_fieldset+fieldset]:border-t [&_fieldset+fieldset]:border-black/[0.08] [&_fieldset+fieldset]:pt-3.5 dark:[&_fieldset+fieldset]:border-white/12 [&_legend]:mb-0.5 [&_legend]:text-xs [&_legend]:font-bold [&_legend]:tracking-[0.1em] [&_legend]:uppercase [&_legend]:!text-current [&_label:not(:has(input[type=checkbox]))]:grid [&_label:not(:has(input[type=checkbox]))]:gap-1.5 [&_label:not(:has(input[type=checkbox]))]:text-[13px] [&_label:not(:has(input[type=checkbox]))]:!text-current [&_label:has(input[type=checkbox])]:flex [&_label:has(input[type=checkbox])]:items-center [&_label:has(input[type=checkbox])]:gap-2 [&_label:has(input[type=checkbox])]:text-inherit [&_select]:rounded-xl [&_select]:border [&_select]:border-black/[0.08] [&_select]:bg-[#f4f3fb] [&_select]:px-3 [&_select]:py-2.5 dark:[&_select]:border-white/12 dark:[&_select]:bg-[#09090b]"
+      id="playground-controls"
+    >
+      <fieldset>
+        <legend>Theme</legend>
+        <div class="flex items-center justify-between gap-3">
+          <div class="inline-flex shrink-0 rounded-full border p-0.5" data-theme-group role="group" aria-label="Theme">
+            <button class="inline-flex items-center gap-1 rounded-full bg-[#16141a] px-2.5 py-1.5 text-xs font-semibold text-white" type="button" data-preview-mode="light" aria-pressed="true">
+              <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.75" /><path stroke="currentColor" stroke-width="1.75" stroke-linecap="round" d="M12 3v1.5M12 19.5V21M3 12h1.5M19.5 12H21M5.6 5.6l1.1 1.1M17.3 17.3l1.1 1.1M18.4 5.6l-1.1 1.1M6.7 17.3l-1.1 1.1" /></svg>
+              Light
+            </button>
+            <button class="inline-flex items-center gap-1 rounded-full bg-transparent px-2.5 py-1.5 text-xs font-semibold" type="button" data-preview-mode="dark" aria-pressed="false">
+              <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" aria-hidden="true"><path d="M16.5 13.5A6.5 6.5 0 0 1 10 4.2 7 7 0 1 0 19.8 14a6.5 6.5 0 0 1-3.3-.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round" /></svg>
+              Dark
+            </button>
+          </div>
+          <div class="flex shrink-0 items-center gap-2" role="radiogroup" aria-label="Custom theme">
+            <button class="relative h-7 w-7 overflow-hidden rounded-full ring-offset-2 focus-visible:outline-none focus-visible:ring-2" type="button" role="radio" aria-label="Lavender theme" aria-checked="true" data-accent="lavender" style="background:#ECE8FB">
+              <span class="absolute right-0 bottom-0 h-4 w-4 rounded-tl-full" style="background:#7C4DFF" aria-hidden="true"></span>
+            </button>
+            <button class="relative h-7 w-7 overflow-hidden rounded-full ring-offset-2 focus-visible:outline-none focus-visible:ring-2" type="button" role="radio" aria-label="Ocean theme" aria-checked="false" data-accent="ocean" style="background:#E3EBFB">
+              <span class="absolute right-0 bottom-0 h-4 w-4 rounded-tl-full" style="background:#2563EB" aria-hidden="true"></span>
+            </button>
+            <button class="relative h-7 w-7 overflow-hidden rounded-full ring-offset-2 focus-visible:outline-none focus-visible:ring-2" type="button" role="radio" aria-label="Blush theme" aria-checked="false" data-accent="blush" style="background:#F9E6EF">
+              <span class="absolute right-0 bottom-0 h-4 w-4 rounded-tl-full" style="background:#DB2777" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+        <label>Locale
+          <select name="locale"><option>en-US</option><option>el-GR</option><option>ro-RO</option><option>bg-BG</option><option>hu-HU</option><option>pl-PL</option></select>
+        </label>
+      </fieldset>
+      <fieldset data-card-controls>
+        <legend>Card</legend>
+        <label>Input grouping
+          <select name="grouping"><option value="spaced">Spaced</option><option value="condensed">Condensed</option></select>
+        </label>
+        <label>Validation
+          <select name="validationMode"><option>onChange</option><option>onBlur</option><option>onTouched</option><option>onSubmit</option></select>
+        </label>
+        <label><input type="checkbox" name="savedCards" checked /> Saved cards</label>
+        <label><input type="checkbox" name="savedCardOptIn" checked /> Save-card opt-in</label>
+      </fieldset>
+      <fieldset data-card-controls>
+        <legend>Pay button</legend>
+        <label><input type="checkbox" name="submitVisible" checked /> SDK Pay button</label>
+        <label>Button type
+          <select name="submitType"><option>pay</option><option>buy</option><option>checkout</option><option>book</option><option>donate</option><option>deposit</option><option>order</option><option>subscribe</option><option>topUp</option></select>
+        </label>
+      </fieldset>
+      <fieldset data-form-controls>
+        <legend>Wallets</legend>
+        <label><input type="checkbox" name="applePay" checked /> Apple Pay</label>
+        <label><input type="checkbox" name="googlePay" checked /> Google Pay</label>
+      </fieldset>
+      <fieldset data-form-controls>
+        <legend>Customer details</legend>
+        <label><input type="checkbox" name="collectOnCard" /> Collect on card</label>
+        <label><input type="checkbox" name="collectOnApplePay" /> Collect on Apple Pay</label>
+        <label><input type="checkbox" name="collectOnGooglePay" /> Collect on Google Pay</label>
+      </fieldset>
+    </form>
+    <div class="flex w-full flex-col gap-4 rounded-[28px] p-4" data-playground-preview>
+      <div data-methods="paymentForm,paymentCard,applePay,googlePay"></div>
+      <div class="relative w-full" data-widget-shell>
+        <div class="widget-border">
+          <div class="widget-glow" aria-hidden="true"></div>
+          <div class="relative h-auto rounded-3xl px-6 pt-6 pb-5" data-widget-surface>
+            <div class="widget-bloom" aria-hidden="true"></div>
+            <div class="relative z-[1] flex flex-col gap-4">
+              <div class="checkout-stage">
+                <div data-loading></div>
+                <div class="checkout-slot" id="checkout"></div>
+              </div>
+              <p class="my-3 rounded-xl bg-[#ff4757]/12 px-3 py-2.5 text-sm text-[#ff4757]" data-error hidden></p>
+              <div data-result hidden></div>
+              <button class="mt-4 cursor-pointer rounded-full border border-black/[0.08] bg-transparent px-[18px] py-3 font-semibold disabled:cursor-default disabled:opacity-45 dark:border-white/12" type="button" data-restart hidden>New payment</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

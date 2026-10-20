@@ -1,0 +1,178 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(html[data-theme="dark"], html[data-theme="dark"] *));
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+  --breakpoint-wide: 1181px;
+}
+
+html {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes border-rotate {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+@keyframes glow-breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleX(1) scaleY(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scaleX(1.06) scaleY(1.1);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.widget-border {
+  position: relative;
+  border-radius: 25px;
+  padding: 1px;
+  animation: border-rotate 10s linear infinite;
+  background: conic-gradient(
+    from var(--border-angle),
+    var(--canvas, #f4f3fb) 0deg,
+    var(--canvas, #f4f3fb) 180deg,
+    rgba(124, 77, 255, 0.1) 210deg,
+    rgba(124, 77, 255, 0.45) 242deg,
+    rgba(159, 85, 255, 0.65) 255deg,
+    rgba(220, 200, 255, 0.75) 263deg,
+    rgba(159, 85, 255, 0.65) 271deg,
+    rgba(124, 77, 255, 0.45) 284deg,
+    rgba(124, 77, 255, 0.1) 314deg,
+    var(--canvas, #f4f3fb) 344deg,
+    var(--canvas, #f4f3fb) 360deg
+  );
+}
+
+html[data-theme="dark"] .widget-border {
+  --canvas: #09090b;
+}
+
+.widget-border::after {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border-radius: 56px;
+  background: conic-gradient(
+    from var(--border-angle),
+    transparent 0deg,
+    transparent 185deg,
+    rgba(124, 77, 255, 0.08) 218deg,
+    rgba(124, 77, 255, 0.22) 252deg,
+    rgba(180, 124, 255, 0.35) 263deg,
+    rgba(124, 77, 255, 0.22) 274deg,
+    rgba(124, 77, 255, 0.08) 308deg,
+    transparent 340deg,
+    transparent 360deg
+  );
+  filter: blur(26px);
+  animation: border-rotate 10s linear infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.widget-glow {
+  position: absolute;
+  bottom: -18px;
+  left: 18%;
+  right: 18%;
+  height: 48px;
+  border-radius: 50%;
+  background: #7c4dff;
+  filter: blur(28px);
+  animation: glow-breathe 4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.card-list {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(124, 77, 255, 0.45) transparent;
+}
+
+.checkout-slot,
+.checkout-slot iframe {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  border: 0;
+}
+
+.widget-bloom {
+  position: absolute;
+  top: 0;
+  left: 12.5%;
+  width: 75%;
+  height: 160px;
+  transform: translateY(-25%);
+  border-radius: 999px;
+  background: rgba(124, 77, 255, 0.09);
+  filter: blur(56px);
+  pointer-events: none;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.checkout-stage {
+  position: relative;
+}
+
+.checkout-stage:has(.checkout-loading) {
+  min-height: 360px;
+}
+
+.checkout-stage:has(.checkout-loading.wallet) {
+  min-height: 52px;
+}
+
+.checkout-stage:has(.checkout-loading) > .checkout-slot {
+  visibility: hidden;
+}
+
+.checkout-loading {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  display: grid;
+  align-content: start;
+  gap: 12px;
+}
+
+.checkout-loading span {
+  height: 52px;
+  border-radius: 12px;
+  background: color-mix(in srgb, currentColor 8%, transparent);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.checkout-loading.wallet span {
+  border-radius: 999px;
+}
+
+.checkout-loading.wallet span:not(:first-child) {
+  display: none;
+}
