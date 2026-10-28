@@ -1,6 +1,6 @@
 {
   "name": "@xmoney/xmoney-js",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Load the xMoney Checkout browser SDK and its TypeScript types",
   "license": "MIT",
   "type": "module",
