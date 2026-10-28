@@ -65,7 +65,7 @@ function ignoredMembers(): void {
     orderPayload: "e30=",
     orderChecksum: "checksum",
     customerDetails: {
-      // @ts-expect-error Apple Pay only accepts applePay
+      // @ts-expect-error Apple Pay accepts applePay and fields
       card: true,
     },
   };
@@ -76,8 +76,20 @@ function ignoredMembers(): void {
     orderPayload: "e30=",
     orderChecksum: "checksum",
     customerDetails: {
-      // @ts-expect-error Apple Pay only accepts applePay
+      // @ts-expect-error Apple Pay accepts applePay and fields
       googlePay: true,
+    },
+  };
+
+  const appleDefaultValues: ApplePayConfig = {
+    container: "apple",
+    publicKey: "pk_test_site",
+    orderPayload: "e30=",
+    orderChecksum: "checksum",
+    customerDetails: {
+      applePay: true,
+      // @ts-expect-error defaultValues prefills the card form only
+      defaultValues: { fullName: "Ada Lovelace" },
     },
   };
 
@@ -87,7 +99,7 @@ function ignoredMembers(): void {
     orderPayload: "e30=",
     orderChecksum: "checksum",
     customerDetails: {
-      // @ts-expect-error Google Pay only accepts googlePay
+      // @ts-expect-error Google Pay accepts googlePay and fields
       card: true,
     },
   };
@@ -98,8 +110,34 @@ function ignoredMembers(): void {
     orderPayload: "e30=",
     orderChecksum: "checksum",
     customerDetails: {
-      // @ts-expect-error Google Pay only accepts googlePay
+      // @ts-expect-error Google Pay accepts googlePay and fields
       applePay: true,
+    },
+  };
+
+  const googleDefaultValues: GooglePayConfig = {
+    container: "google",
+    publicKey: "pk_test_site",
+    orderPayload: "e30=",
+    orderChecksum: "checksum",
+    customerDetails: {
+      googlePay: true,
+      // @ts-expect-error defaultValues prefills the card form only
+      defaultValues: { email: "ada@example.com" },
+    },
+  };
+
+  const formFieldType: PaymentFormConfig = {
+    container: "checkout",
+    publicKey: "pk_test_site",
+    orderPayload: "e30=",
+    orderChecksum: "checksum",
+    customerDetails: {
+      card: true,
+      fields: {
+        // @ts-expect-error field flags are booleans
+        fullName: "yes",
+      },
     },
   };
 
@@ -123,8 +161,11 @@ function ignoredMembers(): void {
   void saved;
   void appleCardDetails;
   void appleGoogleDetails;
+  void appleDefaultValues;
   void googleCardDetails;
   void googleAppleDetails;
+  void googleDefaultValues;
+  void formFieldType;
   void loadOptions;
 }
 
@@ -134,7 +175,22 @@ function acceptedMembers(): void {
     publicKey: "pk_test_site",
     orderPayload: "e30=",
     orderChecksum: "checksum",
-    customerDetails: { card: true, applePay: true, googlePay: true },
+    customerDetails: {
+      card: true,
+      applePay: true,
+      googlePay: true,
+      fields: { fullName: true, email: true, phone: false, address: true },
+      defaultValues: {
+        fullName: "Ada Lovelace",
+        email: "ada@example.com",
+        phone: "+40722123456",
+        country: "RO",
+        region: "București",
+        city: "Bucharest",
+        postalCode: "010101",
+        address: "1 Example Street",
+      },
+    },
   };
 
   const card: PaymentCardConfig = {
@@ -142,7 +198,11 @@ function acceptedMembers(): void {
     publicKey: "pk_test_site",
     orderPayload: "e30=",
     orderChecksum: "checksum",
-    customerDetails: { card: true, applePay: true, googlePay: true },
+    customerDetails: {
+      card: true,
+      fields: { email: true },
+      defaultValues: { email: "ada@example.com", country: "RO" },
+    },
   };
 
   const applePay: ApplePayConfig = {
@@ -150,7 +210,7 @@ function acceptedMembers(): void {
     publicKey: "pk_test_site",
     orderPayload: "e30=",
     orderChecksum: "checksum",
-    customerDetails: { applePay: true },
+    customerDetails: { applePay: true, fields: { email: true, phone: true } },
     options: { appearance: { variables: { colorBackground: "transparent" } } },
   };
 
@@ -159,7 +219,7 @@ function acceptedMembers(): void {
     publicKey: "pk_test_site",
     orderPayload: "e30=",
     orderChecksum: "checksum",
-    customerDetails: { googlePay: true },
+    customerDetails: { googlePay: true, fields: { fullName: true } },
     options: { appearance: { variables: { colorBackground: "transparent" } } },
   };
 

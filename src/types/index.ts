@@ -43,6 +43,8 @@ export type {
   CardHolderVerificationResult,
   CardInputGrouping,
   CustomerDetails,
+  CustomerDetailsDefaultValues,
+  CustomerDetailsFields,
   FormButtonType,
   GooglePayConfig,
   GooglePayInstance,

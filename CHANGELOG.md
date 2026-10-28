@@ -6,6 +6,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+### Added
+
+- `customerDetails.fields` selects which blocks the checkout collects (`fullName`, `email`, `phone`, `address`) and replaces the server field list. `customerDetails.defaultValues` prefills the card form.
+
 ## [0.0.1] - 2026-10-20
 
 First public release.

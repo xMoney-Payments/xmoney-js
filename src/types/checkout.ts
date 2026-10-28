@@ -75,14 +75,50 @@ export interface SharedOptions {
 }
 
 /**
- * Customer details collection flags for the payment form and payment card.
+ * Which customer-detail blocks the checkout collects.
+ * This list replaces the `/inline-checkout/fields` call. A missing key counts as `false`.
+ */
+export interface CustomerDetailsFields {
+  fullName?: boolean;
+  email?: boolean;
+  phone?: boolean;
+  /**
+   * Shows the whole address block: country, region, city, postal code, and street.
+   */
+  address?: boolean;
+}
+
+/**
+ * Prefills the card form. Values for inactive blocks, or that do not match a
+ * predefined list, are ignored.
+ *
+ * `country` is an ISO 3166-1 alpha-2 code. `phone` is E.164 and starts with `+`.
+ * `region` is a subdivision name or alias for `country`. `postalCode` applies
+ * only when that country uses a postal code.
+ */
+export interface CustomerDetailsDefaultValues {
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  country?: string;
+  region?: string;
+  city?: string;
+  postalCode?: string;
+  address?: string;
+}
+
+/**
+ * Customer details collection for the payment form and payment card.
  * `card`, `applePay`, and `googlePay` turn collection on for that method.
- * Standalone Apple Pay and Google Pay accept only their own flag.
+ * Standalone Apple Pay and Google Pay accept their own flag and `fields`.
+ * `defaultValues` prefills the card form.
  */
 export interface CustomerDetails {
   card?: boolean;
   applePay?: boolean;
   googlePay?: boolean;
+  fields?: CustomerDetailsFields;
+  defaultValues?: CustomerDetailsDefaultValues;
 }
 
 export interface CardHolderVerification {
@@ -207,7 +243,7 @@ export interface PaymentFormConfig extends PaymentCardConfig {
 export interface PaymentFormInstance extends PaymentCardInstance {}
 
 export interface ApplePayConfig extends BaseConfig {
-  customerDetails?: Pick<CustomerDetails, "applePay">;
+  customerDetails?: Pick<CustomerDetails, "applePay" | "fields">;
   options?: SharedOptions & {
     appearance?: ApplePayAppearance;
   };
@@ -216,7 +252,7 @@ export interface ApplePayConfig extends BaseConfig {
 export interface ApplePayInstance extends BaseInstance {}
 
 export interface GooglePayConfig extends BaseConfig {
-  customerDetails?: Pick<CustomerDetails, "googlePay">;
+  customerDetails?: Pick<CustomerDetails, "googlePay" | "fields">;
   options?: SharedOptions & {
     appearance?: GooglePayAppearance;
   };

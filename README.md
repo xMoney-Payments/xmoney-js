@@ -74,6 +74,27 @@ await card.validate();
 card.submit();
 ```
 
+### Customer details
+
+`paymentForm` and `paymentCard` take `customerDetails`. `fields` replaces the server field list: a missing key counts as `false`. `defaultValues` prefills the card form. `country` is an ISO 3166-1 alpha-2 code, `phone` is E.164 and starts with `+`, and `region` is a subdivision name for that country. Values for inactive blocks are ignored. Standalone `applePay` and `googlePay` accept `fields` and their own collection flag.
+
+```ts
+customerDetails: {
+  card: true,
+  fields: { fullName: true, email: true, phone: true, address: true },
+  defaultValues: {
+    fullName: 'Ada Lovelace',
+    email: 'ada@example.com',
+    phone: '+40722123456',
+    country: 'RO',
+    region: 'București',
+    city: 'Bucharest',
+    postalCode: '010101',
+    address: '1 Example Street',
+  },
+},
+```
+
 ### `applePay`
 
 `updateOrder` and `destroy` match `paymentForm`. Check `getPaymentMethodCapabilities` before mounting.
